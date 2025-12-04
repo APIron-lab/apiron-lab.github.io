@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Universal Token Counter (UTC) – APIron Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Universal Token Counter (UTC) は、OpenAI互換エンコーディング向けの高精度トークンカウントAPIです。日本語を含む多言語テキストのコスト試算やログ集計に最適です。"
+  />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root {
+      --bg: #05060a;
+      --card: #0f1117;
+      --accent: #4cc9f0;
+      --accent-soft: #f1faee;
+      --text-main: #f8f9fa;
+      --text-sub: #a8b2c1;
+      --border-soft: #22252f;
+      --code-bg: #111319;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #151823 0, #05060a 55%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    a { color: #4ea8de; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header, main, footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    header {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .header-mainline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    header h1 {
+      margin: 0 0 0.3rem;
+      font-size: 1.9rem;
+    }
+    header p {
+      margin: 0.2rem 0;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+      background: rgba(10, 12, 20, 0.9);
+      margin-top: 0.4rem;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(76, 201, 240, 0.7);
+    }
+    .lang-switch {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+    .lang-switch a {
+      color: var(--text-sub);
+      text-decoration: none;
+    }
+    .lang-switch a:hover {
+      text-decoration: underline;
+    }
+    .lang-switch .active {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+    h2 {
+      margin-top: 1.7rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+    p { margin: 0.2rem 0 0.6rem; }
+    ul { margin: 0.2rem 0 0.7rem; padding-left: 1.2rem; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 0.8rem 0.9rem;
+      overflow-x: auto;
+      border: 1px solid var(--border-soft);
+      font-size: 0.85rem;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 100%;
+      font-size: 0.9rem;
+      margin: 0.3rem 0 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border-soft);
+      padding: 0.4rem 0.5rem;
+      text-align: left;
+    }
+    th { background: #11131b; }
+    .section-note {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    footer {
+      border-top: 1px solid var(--border-soft);
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    @media (max-width: 600px) {
+      header, main, footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      header h1 { font-size: 1.6rem; }
+      .header-mainline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-mainline">
+      <div>
+        <h1>Universal Token Counter (UTC)</h1>
+        <p>OpenAI 互換エンコーディング向けの高精度トークンカウント API。</p>
+      </div>
+      <nav class="lang-switch" aria-label="Language">
+        <a href="/apis/universal-token-counter.html">EN</a>
+        <span> / </span>
+        <span class="active">日本語</span>
+      </nav>
+    </div>
+    <p>
+      日本語を含む多言語テキストのトークン数を、高速かつ安定した JSON 形式で取得するためのユーティリティ API です。
+    </p>
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Token Counting / LLM Utility
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>概要</h2>
+      <p>
+        Universal Token Counter (UTC) は、LLM ワークフロー向けに設計された
+        <strong>高精度・多言語対応トークンカウンタ API</strong> です。
+      </p>
+      <p>
+        OpenAI 互換のエンコーディング（例：<code>o200k_base</code> / <code>cl100k_base</code>）に対応し、  
+        <strong>モデルごとのトークン数・文字数・密度</strong> を統一フォーマットの JSON で返却します。
+      </p>
+      <ul>
+        <li>OpenAI 互換エンコーディング（gpt-4o 系など）に対応</li>
+        <li>日本語を含む多言語テキスト前提の設計</li>
+        <li>シンプルな REST API / FastAPI 実装</li>
+        <li><code>result + meta</code> の 2 階層レスポンス構造（UTC Spec v0.1）</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>RapidAPI での利用</h2>
+      <p>UTC は <strong>RapidAPI</strong> 上からも利用できます。</p>
+      <ul>
+        <li>ブラウザ上での即時テスト</li>
+        <li>API キー管理・レート制限の可視化</li>
+        <li>無料プラン（Free Tier）あり</li>
+        <li>cURL / JS / Python 用コードスニペットを自動生成</li>
+      </ul>
+      <p>
+        🔗 RapidAPI Hub:
+        <a href="https://rapidapi.com/APIronlab/api/universal-token-counter-utc">
+          https://rapidapi.com/APIronlab/api/universal-token-counter-utc
+        </a>
+      </p>
+    </section>
+
+    <section>
+      <h2>エンドポイント</h2>
+      <p><code>POST /utc/v0/token-count</code></p>
+      <p>リクエスト例：</p>
+      <pre><code>{
+  "model": "gpt-4o",
+  "text": "これはテストです"
+}</code></pre>
+      <p>レスポンス例：</p>
+      <pre><code>{
+  "result": {
+    "model": "gpt-4o",
+    "encoding": "o200k_base",
+    "char_count": 8,
+    "token_count": 5,
+    "token_per_char": 0.625
+  },
+  "meta": {
+    "input_language": "ja",
+    "input_size_bytes": 17,
+    "token_density": 0.294,
+    "model_family": "openai",
+    "processing_time_ms": 3.24,
+    "utc_timestamp": "2025-01-01T00:00:00Z",
+    "version": "0.1.0"
+  }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>対応モデル（例）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Encoding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>gpt-4o</td>
+            <td>o200k_base</td>
+          </tr>
+          <tr>
+            <td>gpt-4.1</td>
+            <td>o200k_base</td>
+          </tr>
+          <tr>
+            <td>gpt-4.1-mini</td>
+            <td>o200k_base</td>
+          </tr>
+          <tr>
+            <td>gpt-4</td>
+            <td>cl100k_base</td>
+          </tr>
+          <tr>
+            <td>gpt-3.5-turbo</td>
+            <td>cl100k_base</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="section-note">
+        実際の対応モデル一覧は GitHub リポジトリまたは RapidAPI 上のドキュメントを参照してください。
+      </p>
+    </section>
+
+    <section>
+      <h2>ユースケース</h2>
+      <ul>
+        <li>LLM 推論コストの見積もり・管理</li>
+        <li>ログ集計時のトークン使用量トラッキング</li>
+        <li>トークン上限に対するプロンプト長制御</li>
+        <li>複数モデル間の「トークン効率」比較</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>クイックスタート – Python 例</h2>
+      <pre><code>import requests
+
+payload = {
+    "model": "gpt-4o",
+    "text": "これはテストです",
+}
+
+res = requests.post(
+    "https://your-endpoint/utc/v0/token-count",  # RapidAPI / API Gateway など
+    json=payload,
+)
+print(res.json())</code></pre>
+    </section>
+
+    <section>
+      <h2>リンク</h2>
+      <ul>
+        <li>GitHub: <a href="https://github.com/APIron-lab/Universal-Token-Counter">https://github.com/APIron-lab/Universal-Token-Counter</a></li>
+        <li>RapidAPI: <a href="https://rapidapi.com/APIronlab/api/universal-token-counter-utc">https://rapidapi.com/APIronlab/api/universal-token-counter-utc</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    © APIron Lab – Universal Token Counter (UTC).
+  </footer>
+</body>
+</html>
+

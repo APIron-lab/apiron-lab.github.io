@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Encoding Repair API – APIron Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Encoding Repair API は、Base64 エンコードされた生バイト列から UTF-8 / Shift_JIS / EUC-JP / Latin-1 などをまたいだ文字化けを安全に修復する、日本語・多言語テキスト向けのユーティリティ API です。"
+  />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root {
+      --bg: #05060a;
+      --card: #0f1117;
+      --accent: #e63946;
+      --accent-soft: #f1faee;
+      --text-main: #f8f9fa;
+      --text-sub: #a8b2c1;
+      --border-soft: #22252f;
+      --code-bg: #111319;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #151823 0, #05060a 55%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    a { color: #4ea8de; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header, main, footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    header {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .header-mainline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    header h1 {
+      margin: 0 0 0.3rem;
+      font-size: 1.9rem;
+    }
+    header p {
+      margin: 0.2rem 0;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+      background: rgba(10, 12, 20, 0.9);
+      margin-top: 0.4rem;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    }
+    .lang-switch {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+    .lang-switch a {
+      color: var(--text-sub);
+      text-decoration: none;
+    }
+    .lang-switch a:hover {
+      text-decoration: underline;
+    }
+    .lang-switch .active {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+    h2 {
+      margin-top: 1.7rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+    p { margin: 0.2rem 0 0.6rem; }
+    ul { margin: 0.2rem 0 0.7rem; padding-left: 1.2rem; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 0.8rem 0.9rem;
+      overflow-x: auto;
+      border: 1px solid var(--border-soft);
+      font-size: 0.85rem;
+    }
+    .section-note {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    footer {
+      border-top: 1px solid var(--border-soft);
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    @media (max-width: 600px) {
+      header, main, footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      header h1 { font-size: 1.6rem; }
+      .header-mainline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-mainline">
+      <div>
+        <h1>Encoding Repair API (v2.0)</h1>
+        <p>
+          UTF-8 / Shift_JIS / EUC-JP / Latin-1 をまたぐ文字化けを Base64 生バイトから修復する API。
+        </p>
+      </div>
+      <nav class="lang-switch" aria-label="Language">
+        <a href="/apis/encoding-repair.html">EN</a>
+        <span> / </span>
+        <span class="active">日本語</span>
+      </nav>
+    </div>
+    <p>
+      日本語を含む多言語テキストの文字化けを、安全かつ高精度に修復するためのユーティリティ API です。
+    </p>
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Pre-AI Input Hygiene / Encoding Utility
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>概要</h2>
+      <p>
+        Encoding Repair API は、<strong>Base64 エンコードされた生バイト列</strong> を入力とし、  
+        UTF-8 / Shift_JIS / EUC-JP / Latin-1 など複数の文字コードをまたいで発生した
+        <strong>文字化け（mojibake）を自動修復</strong> する API です。
+      </p>
+      <p>
+        コピー＆ペーストやエディタ経由の貼り付けでは失われてしまう情報を守るため、  
+        あえて <strong>「Base64 専用」</strong> の入力仕様を採用しています。
+      </p>
+      <ul>
+        <li>Base64 専用入力（情報欠損のない安全な入力経路）</li>
+        <li>自動エンコーディング判定 + セーフフィルタ</li>
+        <li>UTF-8 / Shift_JIS / EUC-JP / Latin-1 / その他主要エンコードに対応</li>
+        <li><code>result + meta</code> の 2 階層レスポンス構造（APIron Spec）</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>RapidAPI での利用</h2>
+      <p>
+        Encoding Repair API は <strong>RapidAPI</strong> 上からすぐに利用できます。
+      </p>
+      <ul>
+        <li>ブラウザ上でのワンクリックリクエストテスト</li>
+        <li>API キー管理・請求・使用量トラッキング</li>
+        <li>Free / BASIC / PRO / ULTRA プラン</li>
+        <li>cURL / Node.js / Python などのコードスニペット自動生成</li>
+      </ul>
+      <p>
+        🔗 RapidAPI Hub:
+        <a href="https://rapidapi.com/APIronlab/api/encoding-repair-api">
+          https://rapidapi.com/APIronlab/api/encoding-repair-api
+        </a>
+      </p>
+    </section>
+
+    <section>
+      <h2>エンドポイント</h2>
+      <p><code>POST /encoding/v2/repair</code></p>
+      <p>リクエストボディ（JSON）例：</p>
+      <pre><code>{
+  "raw_bytes_base64": "&lt;Base64エンコード済みバイト列&gt;",
+  "mode": "auto",
+  "target_encoding": "utf-8"
+}</code></pre>
+      <p>レスポンス例：</p>
+      <pre><code>{
+  "result": {
+    "fixed_text": "テスト",
+    "target_encoding": "utf-8",
+    "changed": true
+  },
+  "meta": {
+    "version": "2.0.0",
+    "mode_used": "auto",
+    "detected_path": "latin1-&gt;utf-8",
+    "confidence": 0.98,
+    "status": "ok",
+    "execution_ms": 5.42,
+    "input_bytes_length": 9
+  }
+}</code></pre>
+      <p class="section-note">
+        セーフフィルタにより、信頼度が低い場合は <code>changed: false</code> として元データをそのまま返却します。
+      </p>
+    </section>
+
+    <section>
+      <h2>レスポンススキーマ</h2>
+      <p>運用システムで扱いやすいよう、安定した 2 階層構造で返却します。</p>
+      <pre><code>{
+  "result": {
+    "fixed_text": "string",
+    "target_encoding": "string",
+    "changed": false
+  },
+  "meta": {
+    "version": "2.0.0",
+    "mode_used": "auto | force",
+    "detected_path": "utf-8&gt;shift_jis",
+    "confidence": 1.0,
+    "status": "ok",
+    "execution_ms": 12.41,
+    "input_bytes_length": 120
+  }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>対応エンコーディング</h2>
+      <p>日本語環境で頻出する主要な文字コードを幅広くサポートします。</p>
+      <ul>
+        <li><strong>UTF-8</strong> – 現代標準。日本語向けにチューニングされた判定ロジック</li>
+        <li><strong>Shift_JIS（SJIS / CP932）</strong> – Windows 系レガシー環境で多用</li>
+        <li><strong>EUC-JP</strong> – Unix 系・業務システムで利用</li>
+        <li><strong>ISO-2022-JP（JIS）</strong> – メール系システムで多い可変エンコード</li>
+        <li><strong>UTF-16 / UTF-32</strong> – BOM 判定を含む安全な復元</li>
+        <li><strong>ASCII</strong> – 部分的な混在データにも対応</li>
+        <li><strong>その他の稀なエンコード</strong> – ヒューリスティックにより内部処理</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>ユースケース</h2>
+      <h3>1. 日本語テキストの文字化け修復</h3>
+      <ul>
+        <li>SJIS → UTF-8 へのシステム移行</li>
+        <li>古い基幹システム由来の CSV / TSV / ログ</li>
+        <li>Windows / Unix 混在環境での文字化け</li>
+      </ul>
+
+      <h3>2. 生バイト列からのテキスト復元</h3>
+      <p>スクレイピング・メールアーカイブ・ログ収集など、<strong>テキストではなくバイト列のみ</strong> が手元にあるケースに対応します。</p>
+
+      <h3>3. LLM 事前処理（Pre-AI Input Hygiene）</h3>
+      <p>
+        ChatGPT / Claude / Gemini / ローカル LLM などに投入する前に、  
+        文字コードを UTF-8 に正規化するステップとして利用できます。
+      </p>
+
+      <h3>4. CSV / TSV / Excel 取り込み前のクリーニング</h3>
+      <p>日本の業務システムに多い「混在エンコード」問題を、取り込み前に一度 UTF-8 に統一できます。</p>
+    </section>
+
+    <section>
+      <h2>クイックスタート – Python 例</h2>
+      <pre><code>import base64, requests
+
+raw = "テスト".encode("utf-8")
+b64 = base64.b64encode(raw).decode("ascii")
+
+payload = {
+    "raw_bytes_base64": b64,
+    "mode": "auto",
+    "target_encoding": "utf-8",
+}
+
+res = requests.post(
+    "https://your-endpoint/encoding/v2/repair",  # RapidAPI / API Gateway など
+    json=payload,
+)
+print(res.json())</code></pre>
+    </section>
+
+    <section>
+      <h2>リンク</h2>
+      <ul>
+        <li>GitHub: <a href="https://github.com/APIron-lab/Encoding-Repair">https://github.com/APIron-lab/Encoding-Repair</a></li>
+        <li>RapidAPI: <a href="https://rapidapi.com/APIronlab/api/encoding-repair-api">https://rapidapi.com/APIronlab/api/encoding-repair-api</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    © APIron Lab – Encoding Repair API.
+  </footer>
+</body>
+</html>
+
