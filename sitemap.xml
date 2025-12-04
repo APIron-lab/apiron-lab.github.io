@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Root (EN) -->
   <url>
     <loc>https://apiron-lab.github.io/</loc>
     <priority>1.0</priority>
   </url>
+
+  <!-- Root (JA) -->
+  <url>
+    <loc>https://apiron-lab.github.io/ja/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Encoding Repair Docs (EN) -->
   <url>
     <loc>https://apiron-lab.github.io/apis/encoding-repair.html</loc>
     <priority>0.8</priority>
   </url>
+
+  <!-- Encoding Repair Docs (JA) -->
+  <url>
+    <loc>https://apiron-lab.github.io/ja/apis/encoding-repair.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- UTC Docs (EN) -->
   <url>
     <loc>https://apiron-lab.github.io/apis/universal-token-counter.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- UTC Docs (JA) -->
+  <url>
+    <loc>https://apiron-lab.github.io/ja/apis/universal-token-counter.html</loc>
     <priority>0.8</priority>
   </url>
 </urlset>
