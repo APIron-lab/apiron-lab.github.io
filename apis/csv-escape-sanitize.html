@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSV Escape & Sanitize API – APIron Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="CSV Escape & Sanitize API is a practical utility API for escaping, sanitizing, and normalizing CSV content for Excel, ETL, and AI ingestion workflows. RFC4180-compliant cleanup, delimiter detection, and spreadsheet-safe preprocessing."
+  />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root {
+      --bg: #05060a;
+      --card: #0f1117;
+      --accent: #e63946;
+      --accent-soft: #f1faee;
+      --text-main: #f8f9fa;
+      --text-sub: #a8b2c1;
+      --border-soft: #22252f;
+      --code-bg: #111319;
+      --link: #4ea8de;
+      --button-bg: #111827;
+      --button-border: #2a3140;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151823 0, #05060a 55%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header, main, footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .header-mainline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    header h1 {
+      margin: 0 0 0.3rem;
+      font-size: 1.9rem;
+    }
+
+    header p {
+      margin: 0.2rem 0;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+      background: rgba(10, 12, 20, 0.9);
+      margin-top: 0.4rem;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    }
+
+    .lang-switch {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .lang-switch a {
+      color: var(--text-sub);
+      text-decoration: none;
+    }
+
+    .lang-switch a:hover {
+      text-decoration: underline;
+    }
+
+    .lang-switch .active {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--accent-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+
+    .hero-button:hover {
+      text-decoration: none;
+      border-color: var(--link);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    h2 {
+      margin-top: 1.7rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    h3 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.35rem;
+      font-size: 1.02rem;
+    }
+
+    p {
+      margin: 0.2rem 0 0.6rem;
+    }
+
+    ul {
+      margin: 0.2rem 0 0.7rem;
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.22rem;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 0.8rem 0.9rem;
+      overflow-x: auto;
+      border: 1px solid var(--border-soft);
+      font-size: 0.85rem;
+    }
+
+    .section-note {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    .feature-list strong,
+    .usecase-list strong {
+      color: var(--accent-soft);
+    }
+
+    .summary-box {
+      border: 1px solid var(--border-soft);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 1rem 1rem 0.8rem;
+      margin-top: 0.75rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-soft);
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    @media (max-width: 600px) {
+      header, main, footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      .header-mainline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+      }
+
+      .hero-actions {
+        gap: 0.55rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-mainline">
+      <div>
+        <h1>CSV Escape &amp; Sanitize API</h1>
+        <p>
+          Practical CSV cleanup for Excel, ETL, and AI ingestion workflows.
+        </p>
+      </div>
+      <nav class="lang-switch" aria-label="Language">
+        <span class="active">EN</span>
+        <span> / </span>
+        <a href="/ja/">日本語</a>
+      </nav>
+    </div>
+
+    <p>
+      A utility API for escaping, sanitizing, and normalizing messy CSV content
+      before spreadsheet import, structured processing, or LLM ingestion.
+    </p>
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      CSV / Data Hygiene Utility
+    </div>
+
+    <div class="hero-actions">
+      <a class="hero-button" href="https://rapidapi.com/APIronlab/api/csv-escape-sanitize-api" rel="noopener">View on RapidAPI</a>
+      <a class="hero-button" href="https://apiron-lab.github.io/" rel="noopener">Back to APIron Lab</a>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>Overview</h2>
+      <p>
+        CSV Escape &amp; Sanitize API is a practical utility API designed to make
+        messy or risky CSV content safer and easier to process.
+      </p>
+      <p>
+        It is especially useful when CSV files contain inconsistent delimiters,
+        broken quoting, uneven rows, spreadsheet-sensitive values, or input that
+        must be normalized before ETL or AI workflows.
+      </p>
+
+      <div class="summary-box">
+        <ul class="feature-list">
+          <li><strong>RFC4180-compliant escaping</strong> for safer CSV serialization</li>
+          <li><strong>Delimiter detection</strong> for inconsistent input formats</li>
+          <li><strong>Structural cleanup</strong> such as row padding and truncation</li>
+          <li><strong>Excel-safe sanitization</strong> including formula injection protection</li>
+          <li><strong>AI / LLM preprocessing support</strong> for structured text hygiene</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Hosted API on RapidAPI</h2>
+      <p>
+        The CSV Escape &amp; Sanitize API is available on <strong>RapidAPI</strong>.
+      </p>
+      <ul>
+        <li>Test requests directly in the browser</li>
+        <li>Managed API keys and subscription plans</li>
+        <li>Free / Pro / Ultra pricing tiers</li>
+        <li>Auto-generated snippets for cURL, Node.js, Python, and more</li>
+      </ul>
+      <p>
+        RapidAPI Hub:
+        <a href="https://rapidapi.com/APIronlab/api/csv-escape-sanitize-api">
+          https://rapidapi.com/APIronlab/api/csv-escape-sanitize-api
+        </a>
+      </p>
+    </section>
+
+    <section>
+      <h2>What it does</h2>
+
+      <h3>1. Escape CSV safely</h3>
+      <p>
+        Escapes fields according to CSV-safe conventions so that commas, quotes,
+        and line breaks do not break downstream parsing.
+      </p>
+
+      <h3>2. Sanitize spreadsheet-sensitive values</h3>
+      <p>
+        Helps protect against spreadsheet-side risks such as formula injection
+        when CSV files are opened in Excel-like tools.
+      </p>
+
+      <h3>3. Normalize uneven structure</h3>
+      <p>
+        Handles cases where rows have inconsistent numbers of columns and need
+        light cleanup before import or analysis.
+      </p>
+
+      <h3>4. Prepare CSV for AI workflows</h3>
+      <p>
+        Makes CSV-based structured input easier to feed into LLM pipelines by
+        reducing ambiguity and formatting instability.
+      </p>
+    </section>
+
+    <section>
+      <h2>Typical use cases</h2>
+      <ul class="usecase-list">
+        <li><strong>Excel import safety</strong> for exported CSV files</li>
+        <li><strong>ETL preprocessing</strong> before database or warehouse ingestion</li>
+        <li><strong>CSV cleanup</strong> for legacy exports and user uploads</li>
+        <li><strong>AI ingestion hygiene</strong> for structured text preprocessing</li>
+        <li><strong>Operational tooling</strong> where malformed CSV appears in pipelines</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Example Request</h2>
+      <p><code>POST /sanitize</code></p>
+      <p>Example JSON body:</p>
+      <pre><code>{
+  "csv_text": "name,comment\nalice,\"=SUM(1,1)\"\nbob,hello",
+  "response_level": "standard",
+  "excel_safe": true,
+  "normalize_rows": true,
+  "delimiter": "auto"
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>Example Response</h2>
+      <pre><code>{
+  "result": {
+    "sanitized_csv": "name,comment\nalice,\"'=SUM(1,1)\"\nbob,hello",
+    "delimiter_used": ",",
+    "row_count": 3,
+    "column_count": 2
+  },
+  "meta": {
+    "status": "ok",
+    "response_level": "standard",
+    "excel_safe_applied": true,
+    "normalized_rows": true,
+    "execution_ms": 18.7
+  }
+}</code></pre>
+      <p class="section-note">
+        Exact fields may vary depending on the selected response level and plan.
+      </p>
+    </section>
+
+    <section>
+      <h2>Why it matters</h2>
+      <p>
+        CSV is simple in theory and messy in practice.
+      </p>
+      <p>
+        In real workflows, CSV often arrives with broken quoting, delimiter
+        ambiguity, spreadsheet-sensitive values, or inconsistent row structure.
+        Cleaning that manually is repetitive, error-prone, and expensive.
+      </p>
+      <p>
+        CSV Escape &amp; Sanitize API helps reduce that friction by turning messy
+        CSV input into something safer and more usable for downstream systems.
+      </p>
+    </section>
+
+    <section>
+      <h2>Quick Start – Python Example</h2>
+      <pre><code>import requests
+
+payload = {
+    "csv_text": "name,comment\\nalice,\\"=SUM(1,1)\\"\\nbob,hello",
+    "response_level": "standard",
+    "excel_safe": True,
+    "normalize_rows": True,
+    "delimiter": "auto",
+}
+
+res = requests.post(
+    "https://csv-escape-sanitize-api.p.rapidapi.com/sanitize",
+    json=payload,
+    headers={
+        "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
+        "x-rapidapi-host": "csv-escape-sanitize-api.p.rapidapi.com"
+    }
+)
+
+print(res.json())</code></pre>
+    </section>
+
+    <section>
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://rapidapi.com/APIronlab/api/csv-escape-sanitize-api">RapidAPI Listing</a></li>
+        <li><a href="https://apiron-lab.github.io/">APIron Lab Top Page</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    © APIron Lab – CSV Escape &amp; Sanitize API.
+  </footer>
+</body>
+</html>
