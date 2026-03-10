@@ -35,5 +35,16 @@
     <loc>https://apiron-lab.github.io/ja/apis/universal-token-counter.html</loc>
     <priority>0.8</priority>
   </url>
-</urlset>
 
+  <!-- CSV Escape Sanitizer Docs (EN) -->
+  <url>
+    <loc>https://apiron-lab.github.io/apis/csv-escape-sanitize.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- API Adjustmenter Docs (EN) -->
+  <url>
+    <loc>https://apiron-lab.github.io/apis/api-adjustmenter.html</loc>
+    <priority>0.8</priority>
+  </url>
+</urlset>
