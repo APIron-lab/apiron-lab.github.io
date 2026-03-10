@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>API Adjustmenter – APIron Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="API Adjustmenter is a utility API for stabilizing messy JSON responses through normalization, transformation, and diff-oriented cleanup for third-party integrations and LLM workflows."
+  />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root {
+      --bg: #05060a;
+      --card: #0f1117;
+      --accent: #e63946;
+      --accent-soft: #f1faee;
+      --text-main: #f8f9fa;
+      --text-sub: #a8b2c1;
+      --border-soft: #22252f;
+      --code-bg: #111319;
+      --link: #4ea8de;
+      --button-bg: #111827;
+      --button-border: #2a3140;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151823 0, #05060a 55%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header, main, footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .header-mainline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    header h1 {
+      margin: 0 0 0.3rem;
+      font-size: 1.9rem;
+    }
+
+    header p {
+      margin: 0.2rem 0;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+      background: rgba(10, 12, 20, 0.9);
+      margin-top: 0.4rem;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    }
+
+    .lang-switch {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .lang-switch a {
+      color: var(--text-sub);
+      text-decoration: none;
+    }
+
+    .lang-switch a:hover {
+      text-decoration: underline;
+    }
+
+    .lang-switch .active {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--accent-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+
+    .hero-button:hover {
+      text-decoration: none;
+      border-color: var(--link);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    h2 {
+      margin-top: 1.7rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    h3 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.35rem;
+      font-size: 1.02rem;
+    }
+
+    p {
+      margin: 0.2rem 0 0.6rem;
+    }
+
+    ul {
+      margin: 0.2rem 0 0.7rem;
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.22rem;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 0.8rem 0.9rem;
+      overflow-x: auto;
+      border: 1px solid var(--border-soft);
+      font-size: 0.85rem;
+    }
+
+    .section-note {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    .feature-list strong,
+    .usecase-list strong {
+      color: var(--accent-soft);
+    }
+
+    .summary-box {
+      border: 1px solid var(--border-soft);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 1rem 1rem 0.8rem;
+      margin-top: 0.75rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-soft);
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    @media (max-width: 600px) {
+      header, main, footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      .header-mainline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+      }
+
+      .hero-actions {
+        gap: 0.55rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-mainline">
+      <div>
+        <h1>API Adjustmenter</h1>
+        <p>
+          JSON response cleanup for unstable third-party APIs, automation, and LLM workflows.
+        </p>
+      </div>
+      <nav class="lang-switch" aria-label="Language">
+        <span class="active">EN</span>
+        <span> / </span>
+        <a href="/ja/">日本語</a>
+      </nav>
+    </div>
+
+    <p>
+      A utility API for normalizing, transforming, and diffing messy JSON so downstream systems can consume more stable contracts.
+    </p>
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      API / Response Utility
+    </div>
+
+    <div class="hero-actions">
+      <a class="hero-button" href="https://rapidapi.com/APIronlab/api/api-adjustmenter" rel="noopener">View on RapidAPI</a>
+      <a class="hero-button" href="https://apiron-lab.github.io/" rel="noopener">Back to APIron Lab</a>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>Overview</h2>
+      <p>
+        API Adjustmenter is a practical utility API designed to reduce integration friction when external JSON is inconsistent, over-nested, or structurally unstable.
+      </p>
+      <p>
+        It is useful when you need to normalize key styles, coerce values into predictable forms, apply reusable transformation rules, or inspect response drift before passing data into automation or AI systems.
+      </p>
+
+      <div class="summary-box">
+        <ul class="feature-list">
+          <li><strong>JSON normalization</strong> for unstable key naming and value formatting</li>
+          <li><strong>Reusable transformation rules</strong> for contract-friendly response shaping</li>
+          <li><strong>Diff-oriented cleanup</strong> to surface structural drift between versions</li>
+          <li><strong>Integration-safe preprocessing</strong> before ETL, automation, or agent pipelines</li>
+          <li><strong>LLM output cleanup support</strong> for noisy or partially inconsistent JSON</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Hosted API on RapidAPI</h2>
+      <p>
+        The API Adjustmenter is available on <strong>RapidAPI</strong>.
+      </p>
+      <ul>
+        <li>Test requests directly in the browser</li>
+        <li>Managed API keys and subscription handling</li>
+        <li>Free / Pro / Ultra pricing tiers</li>
+        <li>Auto-generated snippets for cURL, Node.js, Python, and more</li>
+      </ul>
+      <p>
+        RapidAPI Hub:
+        <a href="https://rapidapi.com/APIronlab/api/api-adjustmenter">
+          https://rapidapi.com/APIronlab/api/api-adjustmenter
+        </a>
+      </p>
+    </section>
+
+    <section>
+      <h2>What it does</h2>
+
+      <h3>1. Normalize inconsistent JSON</h3>
+      <p>
+        Adjusts key casing, null-like values, type inconsistencies, and other common response irregularities into a more predictable structure.
+      </p>
+
+      <h3>2. Apply reusable adjustment rules</h3>
+      <p>
+        Supports rule-driven cleanup so the same mapping and transformation logic can be reused across repeated API responses.
+      </p>
+
+      <h3>3. Surface response drift</h3>
+      <p>
+        Helps identify structural or semantic changes between payload versions, which is useful when third-party APIs evolve without notice.
+      </p>
+
+      <h3>4. Prepare output for downstream consumers</h3>
+      <p>
+        Produces cleaner JSON that is easier to validate, cache, diff, and pass into automation steps, databases, or LLM tools.
+      </p>
+    </section>
+
+    <section>
+      <h2>Typical use cases</h2>
+      <ul class="usecase-list">
+        <li><strong>Third-party API stabilization</strong> before internal system consumption</li>
+        <li><strong>LLM JSON cleanup</strong> when model output is structurally noisy</li>
+        <li><strong>Workflow automation hygiene</strong> for Zapier, cron jobs, or serverless steps</li>
+        <li><strong>Contract normalization</strong> for frontend and backend integration layers</li>
+        <li><strong>Schema drift monitoring</strong> for brittle upstream providers</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Example Request</h2>
+      <p><code>POST /adjust</code></p>
+      <p>Example JSON body:</p>
+      <pre><code>{
+  "input": {
+    "UserID": "42",
+    "user_name": "Alice",
+    "isActive": "true",
+    "last-login": null
+  },
+  "ruleset": "default-normalize",
+  "response_level": "standard",
+  "include_diff": true
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>Example Response</h2>
+      <pre><code>{
+  "result": {
+    "adjusted_json": {
+      "user_id": 42,
+      "user_name": "Alice",
+      "is_active": true,
+      "last_login": null
+    },
+    "changed": true,
+    "rule_count_applied": 4
+  },
+  "meta": {
+    "status": "ok",
+    "response_level": "standard",
+    "include_diff": true,
+    "diff_summary": {
+      "keys_renamed": 3,
+      "values_coerced": 2
+    },
+    "execution_ms": 11.4
+  }
+}</code></pre>
+      <p class="section-note">
+        Exact fields may vary depending on the selected ruleset, response level, and plan.
+      </p>
+    </section>
+
+    <section>
+      <h2>Why it matters</h2>
+      <p>
+        Integration problems often come from small inconsistencies rather than total outages.
+      </p>
+      <p>
+        A vendor may change casing, mix strings and numbers, add nested wrappers, or return optional fields unpredictably. Those changes create brittle automation and repeated patchwork in downstream code.
+      </p>
+      <p>
+        API Adjustmenter helps absorb that instability early so the rest of your stack can work against cleaner, more repeatable JSON contracts.
+      </p>
+    </section>
+
+    <section>
+      <h2>Quick Start – Python Example</h2>
+      <pre><code>import requests
+
+payload = {
+    "input": {
+        "UserID": "42",
+        "user_name": "Alice",
+        "isActive": "true",
+        "last-login": None,
+    },
+    "ruleset": "default-normalize",
+    "response_level": "standard",
+    "include_diff": True,
+}
+
+res = requests.post(
+    "https://api-adjustmenter.p.rapidapi.com/adjust",
+    json=payload,
+    headers={
+        "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
+        "x-rapidapi-host": "api-adjustmenter.p.rapidapi.com"
+    }
+)
+
+print(res.json())</code></pre>
+    </section>
+
+    <section>
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://rapidapi.com/APIronlab/api/api-adjustmenter">RapidAPI Listing</a></li>
+        <li><a href="https://apiron-lab.github.io/">APIron Lab Top Page</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    © APIron Lab – API Adjustmenter.
+  </footer>
+</body>
+</html>
