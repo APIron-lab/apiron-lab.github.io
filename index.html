@@ -5,11 +5,11 @@
   <link rel="alternate" hreflang="en" href="https://apiron-lab.github.io/" />
   <link rel="alternate" hreflang="ja" href="https://apiron-lab.github.io/ja/" />
   <meta charset="UTF-8" />
-  <title>APIron Lab – LLM Utility APIs (Encoding Repair / Token Counter)</title>
+  <title>APIron Lab – LLM Utility APIs (Encoding Repair / Token Counter / CSV / JSON)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="APIron Lab provides practical utility APIs for LLM workflows, including Encoding Repair API and Universal Token Counter (UTC). Base64-only encoding repair and high-precision token counting for Japanese and multilingual text."
+    content="APIron Lab provides practical utility APIs for LLM workflows, including Encoding Repair API, Universal Token Counter (UTC), CSV Escape & Sanitize API, and API Adjustmenter. Tools for multilingual text, CSV hygiene, token counting, and JSON normalization."
   />
   <meta name="robots" content="index,follow" />
   <style>
@@ -22,25 +22,35 @@
       --text-sub: #a8b2c1;
       --border-soft: #22252f;
       --link: #4ea8de;
+      --button-bg: #111827;
+      --button-border: #2a3140;
     }
+
     * {
       box-sizing: border-box;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #151823 0, #05060a 55%);
       color: var(--text-main);
       line-height: 1.6;
     }
+
     a {
       color: var(--link);
       text-decoration: none;
     }
+
     a:hover {
       text-decoration: underline;
     }
+
     header {
       border-bottom: 1px solid var(--border-soft);
       padding: 1.5rem 1.5rem 1rem;
@@ -48,63 +58,112 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
-    header-top {
-      display: block;
-    }
+
     .header-mainline {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 1rem;
     }
+
     header h1 {
       margin: 0;
       font-size: 1.9rem;
       letter-spacing: 0.03em;
     }
+
     header p {
       margin: 0.4rem 0 0;
       color: var(--text-sub);
       font-size: 0.95rem;
     }
+
     .lang-switch {
       font-size: 0.85rem;
       color: var(--text-sub);
       white-space: nowrap;
     }
+
     .lang-switch a {
       color: var(--text-sub);
       text-decoration: none;
     }
+
     .lang-switch a:hover {
       text-decoration: underline;
     }
+
     .lang-switch .active {
       font-weight: 600;
       color: var(--accent-soft);
     }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--accent-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+
+    .hero-button:hover {
+      text-decoration: none;
+      border-color: var(--link);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
     main {
       max-width: 960px;
       margin: 0 auto;
       padding: 1.5rem;
     }
+
     .intro {
       margin-bottom: 2rem;
     }
+
     .intro p {
       margin: 0.2rem 0;
     }
+
     .intro strong {
       color: var(--accent-soft);
     }
+
+    .spotlight-note {
+      margin-top: 0.8rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-sub);
+      font-size: 0.9rem;
+    }
+
     .api-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
+
     .api-card {
       background: linear-gradient(145deg, #10131b, #05060a);
       border-radius: 12px;
@@ -112,29 +171,42 @@
       border: 1px solid var(--border-soft);
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
     }
+
     .api-card h2 {
       margin: 0 0 0.4rem;
       font-size: 1.25rem;
     }
+
     .api-tagline {
-      margin: 0 0 0.8rem;
+      margin: 0 0 0.45rem;
       font-size: 0.9rem;
       color: var(--text-sub);
     }
+
+    .api-for {
+      margin: 0 0 0.85rem;
+      font-size: 0.83rem;
+      color: var(--accent-soft);
+      opacity: 0.86;
+    }
+
     .api-meta {
       font-size: 0.8rem;
       color: var(--accent-soft);
       opacity: 0.8;
       margin-bottom: 0.6rem;
     }
+
     .api-features {
       padding-left: 1.2rem;
       margin: 0.4rem 0 0.8rem;
       font-size: 0.9rem;
     }
+
     .api-features li {
       margin-bottom: 0.2rem;
     }
+
     .api-links {
       display: flex;
       flex-wrap: wrap;
@@ -142,6 +214,7 @@
       margin-top: 0.4rem;
       font-size: 0.85rem;
     }
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -153,6 +226,7 @@
       color: var(--text-sub);
       background: rgba(10, 12, 20, 0.9);
     }
+
     .badge-dot {
       width: 7px;
       height: 7px;
@@ -160,15 +234,34 @@
       background: var(--accent);
       box-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
     }
+
     .section-title {
       font-size: 1.1rem;
       margin-bottom: 0.4rem;
     }
+
+    .section-subtext {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--text-sub);
+      font-size: 0.92rem;
+    }
+
     .note {
       font-size: 0.85rem;
       color: var(--text-sub);
       margin-top: 0.3rem;
     }
+
+    .roadmap-list {
+      padding-left: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .roadmap-list li {
+      margin-bottom: 0.3rem;
+    }
+
     footer {
       border-top: 1px solid var(--border-soft);
       padding: 1rem 1.5rem 1.5rem;
@@ -177,11 +270,13 @@
       font-size: 0.85rem;
       color: var(--text-sub);
     }
+
     footer a {
       color: var(--text-sub);
       text-decoration: underline;
       text-decoration-style: dotted;
     }
+
     @media (max-width: 600px) {
       header,
       main,
@@ -189,13 +284,19 @@
         padding-left: 1rem;
         padding-right: 1rem;
       }
+
       header h1 {
         font-size: 1.6rem;
       }
+
       .header-mainline {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.2rem;
+      }
+
+      .hero-actions {
+        gap: 0.55rem;
       }
     }
   </style>
@@ -207,7 +308,7 @@
         <h1>APIron Lab – LLM Utility APIs</h1>
         <p>
           Practical tools for <strong>LLM workflows</strong>:
-          encoding repair, token counting, and pre-AI input hygiene.
+          encoding repair, token counting, CSV hygiene, and response normalization.
         </p>
       </div>
       <nav class="lang-switch" aria-label="Language">
@@ -216,7 +317,13 @@
         <a href="/ja/">日本語</a>
       </nav>
     </div>
+
     <p>Utility APIs focused on Japanese and multilingual text pipelines.</p>
+
+    <div class="hero-actions">
+      <a class="hero-button" href="https://rapidapi.com/user/APIronlab" rel="noopener">View on RapidAPI</a>
+      <a class="hero-button" href="https://github.com/APIron-lab" rel="noopener">GitHub Organization</a>
+    </div>
   </header>
 
   <main>
@@ -227,16 +334,27 @@
       </p>
       <p>
         We focus on <strong>Pre-AI Input Hygiene</strong> – fixing encoding issues,
-        normalizing text, and counting tokens before you send data to an LLM.
+        normalizing text, sanitizing structured input, and counting tokens before
+        you send data to an LLM.
       </p>
       <p class="note">
         All APIs are available both as <strong>open-core on GitHub</strong> and
         as <strong>hosted endpoints on RapidAPI</strong>.
       </p>
+
+      <div class="spotlight-note">
+        Featured APIs on RapidAPI link back here for a fuller overview of the
+        APIron Lab lineup, documentation, and product positioning.
+      </div>
     </section>
 
     <section>
       <h2 class="section-title">Available APIs</h2>
+      <p class="section-subtext">
+        Utilities for multilingual text repair, token estimation, CSV cleanup,
+        and unstable JSON normalization.
+      </p>
+
       <div class="api-grid">
         <!-- Encoding Repair API -->
         <article class="api-card">
@@ -251,9 +369,13 @@
             Base64-only encoding repair API to fix mojibake across UTF-8 /
             Shift_JIS / EUC-JP / Latin-1 and more.
           </p>
+          <p class="api-for">
+            For legacy exports, migration files, Japanese text recovery, and
+            pre-AI input cleanup.
+          </p>
           <ul class="api-features">
             <li>Base64 raw bytes input to avoid information loss</li>
-            <li>Automatic encoding detection &amp; safe filtering</li>
+            <li>Automatic encoding detection and safe repair behavior</li>
             <li>Unified UTF-8 output for downstream processing</li>
             <li>Designed for Japanese / multilingual text pipelines</li>
           </ul>
@@ -286,16 +408,18 @@
             High-precision multilingual token counter for OpenAI-compatible
             encodings with a unified JSON response.
           </p>
+          <p class="api-for">
+            For token estimation, cost control, request validation, and logging
+            before LLM execution.
+          </p>
           <ul class="api-features">
             <li>OpenAI-compatible tokenization (o200k_base / cl100k_base)</li>
-            <li>Japanese &amp; multilingual text support</li>
+            <li>Japanese and multilingual text support</li>
             <li>Stable <code>result + meta</code> response schema</li>
             <li>Ideal for cost estimation and logging</li>
           </ul>
           <div class="api-links">
-            <a
-              href="https://apiron-lab.github.io/apis/universal-token-counter.html"
-            >
+            <a href="https://apiron-lab.github.io/apis/universal-token-counter.html">
               Docs (GitHub Pages)
             </a>
             <span>·</span>
@@ -311,6 +435,72 @@
             </a>
           </div>
         </article>
+
+        <!-- CSV Escape & Sanitize API -->
+        <article class="api-card">
+          <div class="api-meta">
+            <span class="badge">
+              <span class="badge-dot"></span>
+              CSV / Data Hygiene
+            </span>
+          </div>
+          <h2>CSV Escape &amp; Sanitize API</h2>
+          <p class="api-tagline">
+            Practical CSV cleanup API for escaping, sanitizing, and normalizing
+            structured text before Excel, ETL, or AI ingestion.
+          </p>
+          <p class="api-for">
+            For messy CSV exports, spreadsheet safety, ETL cleanup, and LLM-ready
+            structured input.
+          </p>
+          <ul class="api-features">
+            <li>RFC4180-compliant escaping</li>
+            <li>Delimiter detection and structural cleanup</li>
+            <li>Excel formula injection protection</li>
+            <li>Safe preprocessing for LLM and data pipelines</li>
+          </ul>
+          <div class="api-links">
+            <a
+              href="https://rapidapi.com/APIronlab/api/csv-escape-sanitize-api"
+              rel="noopener"
+            >
+              RapidAPI
+            </a>
+          </div>
+        </article>
+
+        <!-- API Adjustmenter -->
+        <article class="api-card">
+          <div class="api-meta">
+            <span class="badge">
+              <span class="badge-dot"></span>
+              API / Response Utility
+            </span>
+          </div>
+          <h2>API Adjustmenter</h2>
+          <p class="api-tagline">
+            Utility API for stabilizing messy JSON responses through
+            normalization, transformation, and diff-oriented cleanup.
+          </p>
+          <p class="api-for">
+            For unstable third-party APIs, LLM JSON cleanup, and reusable
+            downstream contracts.
+          </p>
+          <ul class="api-features">
+            <li>Normalize key styles and common value inconsistencies</li>
+            <li>Apply reusable transformation rules</li>
+            <li>Detect structural drift with diff support</li>
+            <li>Useful for automation and integration cleanup</li>
+          </ul>
+          <div class="api-links">
+            <a
+              href="https://rapidapi.com/APIronlab/api/api-adjustmenter"
+              rel="noopener"
+            >
+              RapidAPI
+            </a>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -320,9 +510,10 @@
         We will continue to add utility APIs around
         <strong>preprocessing, quality assurance, and text structuring</strong>.
       </p>
-      <ul class="api-features">
+      <ul class="roadmap-list">
         <li>More advanced mojibake pattern detection</li>
         <li>Token efficiency metrics and model comparison tools</li>
+        <li>CSV and structured-text hygiene utilities</li>
         <li>Integration helpers for other clouds and local runtimes</li>
       </ul>
     </section>
@@ -339,4 +530,3 @@
   </footer>
 </body>
 </html>
-
