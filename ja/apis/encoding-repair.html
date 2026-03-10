@@ -19,6 +19,9 @@
       --text-sub: #a8b2c1;
       --border-soft: #22252f;
       --code-bg: #111319;
+      --link: #4ea8de;
+      --button-bg: #111827;
+      --button-border: #2a3140;
     }
     * { box-sizing: border-box; }
     body {
@@ -29,7 +32,7 @@
       color: var(--text-main);
       line-height: 1.6;
     }
-    a { color: #4ea8de; text-decoration: none; }
+    a { color: var(--link); text-decoration: none; }
     a:hover { text-decoration: underline; }
     header, main, footer {
       max-width: 960px;
@@ -93,13 +96,47 @@
       font-weight: 600;
       color: var(--accent-soft);
     }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--accent-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+    .hero-button:hover {
+      text-decoration: none;
+      border-color: var(--link);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
     h2 {
       margin-top: 1.7rem;
       margin-bottom: 0.5rem;
       font-size: 1.25rem;
     }
+    h3 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.35rem;
+      font-size: 1.02rem;
+    }
     p { margin: 0.2rem 0 0.6rem; }
     ul { margin: 0.2rem 0 0.7rem; padding-left: 1.2rem; }
+    li {
+      margin-bottom: 0.22rem;
+    }
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         "Liberation Mono", "Courier New", monospace;
@@ -117,6 +154,17 @@
       font-size: 0.85rem;
       color: var(--text-sub);
     }
+    .feature-list strong,
+    .usecase-list strong {
+      color: var(--accent-soft);
+    }
+    .summary-box {
+      border: 1px solid var(--border-soft);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 1rem 1rem 0.8rem;
+      margin-top: 0.75rem;
+    }
     footer {
       border-top: 1px solid var(--border-soft);
       margin-top: 2rem;
@@ -133,6 +181,9 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.2rem;
+      }
+      .hero-actions {
+        gap: 0.55rem;
       }
     }
   </style>
@@ -159,6 +210,11 @@
       <span class="badge-dot"></span>
       Pre-AI Input Hygiene / Encoding Utility
     </div>
+    <div class="hero-actions">
+      <a class="hero-button" href="https://rapidapi.com/APIronlab/api/encoding-repair-api" rel="noopener">RapidAPI で見る</a>
+      <a class="hero-button" href="https://github.com/APIron-lab/Encoding-Repair" rel="noopener">GitHub Repo</a>
+      <a class="hero-button" href="/ja/">APIron Lab に戻る</a>
+    </div>
   </header>
 
   <main>
@@ -173,12 +229,19 @@
         コピー＆ペーストやエディタ経由の貼り付けでは失われてしまう情報を守るため、  
         あえて <strong>「Base64 専用」</strong> の入力仕様を採用しています。
       </p>
-      <ul>
+      <ul class="feature-list">
         <li>Base64 専用入力（情報欠損のない安全な入力経路）</li>
         <li>自動エンコーディング判定 + セーフフィルタ</li>
         <li>UTF-8 / Shift_JIS / EUC-JP / Latin-1 / その他主要エンコードに対応</li>
         <li><code>result + meta</code> の 2 階層レスポンス構造（APIron Spec）</li>
       </ul>
+      <div class="summary-box">
+        <h3>この API の役割</h3>
+        <p>
+          文字化けは AI や ETL の前段で発生し、そのまま後続工程に流すと復元不能なまま汚染が広がります。
+          この API はまず生バイトを保持し、そこから安全に UTF-8 へ寄せることで後段の処理基盤を安定化させます。
+        </p>
+      </div>
     </section>
 
     <section>
@@ -269,7 +332,7 @@
     <section>
       <h2>ユースケース</h2>
       <h3>1. 日本語テキストの文字化け修復</h3>
-      <ul>
+      <ul class="usecase-list">
         <li>SJIS → UTF-8 へのシステム移行</li>
         <li>古い基幹システム由来の CSV / TSV / ログ</li>
         <li>Windows / Unix 混在環境での文字化け</li>
@@ -322,4 +385,3 @@ print(res.json())</code></pre>
   </footer>
 </body>
 </html>
-

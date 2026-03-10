@@ -19,6 +19,9 @@
       --text-sub: #a8b2c1;
       --border-soft: #22252f;
       --code-bg: #111319;
+      --link: #4ea8de;
+      --button-bg: #111827;
+      --button-border: #2a3140;
     }
     * { box-sizing: border-box; }
     body {
@@ -29,7 +32,7 @@
       color: var(--text-main);
       line-height: 1.6;
     }
-    a { color: #4ea8de; text-decoration: none; }
+    a { color: var(--link); text-decoration: none; }
     a:hover { text-decoration: underline; }
     header, main, footer {
       max-width: 960px;
@@ -93,13 +96,47 @@
       font-weight: 600;
       color: var(--accent-soft);
     }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--accent-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+    .hero-button:hover {
+      text-decoration: none;
+      border-color: var(--link);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
     h2 {
       margin-top: 1.7rem;
       margin-bottom: 0.5rem;
       font-size: 1.25rem;
     }
+    h3 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.35rem;
+      font-size: 1.02rem;
+    }
     p { margin: 0.2rem 0 0.6rem; }
     ul { margin: 0.2rem 0 0.7rem; padding-left: 1.2rem; }
+    li {
+      margin-bottom: 0.22rem;
+    }
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         "Liberation Mono", "Courier New", monospace;
@@ -132,6 +169,17 @@
       font-size: 0.85rem;
       color: var(--text-sub);
     }
+    .feature-list strong,
+    .usecase-list strong {
+      color: var(--accent-soft);
+    }
+    .summary-box {
+      border: 1px solid var(--border-soft);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 1rem 1rem 0.8rem;
+      margin-top: 0.75rem;
+    }
     footer {
       border-top: 1px solid var(--border-soft);
       margin-top: 2rem;
@@ -148,6 +196,9 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.2rem;
+      }
+      .hero-actions {
+        gap: 0.55rem;
       }
     }
   </style>
@@ -174,6 +225,11 @@
       <span class="badge-dot"></span>
       Token Counting / LLM Utility
     </div>
+    <div class="hero-actions">
+      <a class="hero-button" href="https://rapidapi.com/APIronlab/api/universal-token-counter-utc" rel="noopener">View on RapidAPI</a>
+      <a class="hero-button" href="https://github.com/APIron-lab/Universal-Token-Counter" rel="noopener">GitHub Repo</a>
+      <a class="hero-button" href="/">Back to APIron Lab</a>
+    </div>
   </header>
 
   <main>
@@ -190,12 +246,20 @@
         <strong>token counts, character counts, and density</strong>
         in a unified JSON format.
       </p>
-      <ul>
+      <ul class="feature-list">
         <li>OpenAI-compatible encodings (e.g. gpt-4o family)</li>
         <li>Japanese and multilingual text support</li>
         <li>Simple REST API / FastAPI implementation</li>
         <li><code>result + meta</code> two-layer response (UTC Spec v0.1)</li>
       </ul>
+      <div class="summary-box">
+        <h3>What it stabilizes</h3>
+        <p>
+          Token counting becomes unreliable when teams mix models, encodings, or ad hoc local scripts.
+          UTC provides one API surface for consistent token, character, and density metrics in logging,
+          budgeting, and prompt validation flows.
+        </p>
+      </div>
     </section>
 
     <section>
@@ -283,7 +347,7 @@
 
     <section>
       <h2>Use Cases</h2>
-      <ul>
+      <ul class="usecase-list">
         <li>Estimating and managing LLM inference cost</li>
         <li>Tracking token usage in logging systems</li>
         <li>Controlling prompt length against token limits</li>
@@ -321,4 +385,3 @@ print(res.json())</code></pre>
   </footer>
 </body>
 </html>
-

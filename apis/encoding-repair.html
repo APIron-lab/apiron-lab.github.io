@@ -19,6 +19,9 @@
       --text-sub: #a8b2c1;
       --border-soft: #22252f;
       --code-bg: #111319;
+      --link: #4ea8de;
+      --button-bg: #111827;
+      --button-border: #2a3140;
     }
     * { box-sizing: border-box; }
     body {
@@ -29,7 +32,7 @@
       color: var(--text-main);
       line-height: 1.6;
     }
-    a { color: #4ea8de; text-decoration: none; }
+    a { color: var(--link); text-decoration: none; }
     a:hover { text-decoration: underline; }
     header, main, footer {
       max-width: 960px;
@@ -93,13 +96,47 @@
       font-weight: 600;
       color: var(--accent-soft);
     }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--accent-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+    .hero-button:hover {
+      text-decoration: none;
+      border-color: var(--link);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
     h2 {
       margin-top: 1.7rem;
       margin-bottom: 0.5rem;
       font-size: 1.25rem;
     }
+    h3 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.35rem;
+      font-size: 1.02rem;
+    }
     p { margin: 0.2rem 0 0.6rem; }
     ul { margin: 0.2rem 0 0.7rem; padding-left: 1.2rem; }
+    li {
+      margin-bottom: 0.22rem;
+    }
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         "Liberation Mono", "Courier New", monospace;
@@ -117,6 +154,17 @@
       font-size: 0.85rem;
       color: var(--text-sub);
     }
+    .feature-list strong,
+    .usecase-list strong {
+      color: var(--accent-soft);
+    }
+    .summary-box {
+      border: 1px solid var(--border-soft);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 1rem 1rem 0.8rem;
+      margin-top: 0.75rem;
+    }
     footer {
       border-top: 1px solid var(--border-soft);
       margin-top: 2rem;
@@ -133,6 +181,9 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.2rem;
+      }
+      .hero-actions {
+        gap: 0.55rem;
       }
     }
   </style>
@@ -161,6 +212,11 @@
       <span class="badge-dot"></span>
       Pre-AI Input Hygiene / Encoding Utility
     </div>
+    <div class="hero-actions">
+      <a class="hero-button" href="https://rapidapi.com/APIronlab/api/encoding-repair-api" rel="noopener">View on RapidAPI</a>
+      <a class="hero-button" href="https://github.com/APIron-lab/Encoding-Repair" rel="noopener">GitHub Repo</a>
+      <a class="hero-button" href="/">Back to APIron Lab</a>
+    </div>
   </header>
 
   <main>
@@ -175,12 +231,20 @@
         To prevent information loss from copy &amp; paste or editor conversions,
         the API deliberately adopts a <strong>“Base64-only”</strong> input design.
       </p>
-      <ul>
+      <ul class="feature-list">
         <li>Base64-only input (no information loss)</li>
         <li>Automatic encoding detection + safe filter</li>
         <li>Supports UTF-8 / Shift_JIS / EUC-JP / Latin-1 / more</li>
         <li><code>result + meta</code> two-layer response (APIron Spec)</li>
       </ul>
+      <div class="summary-box">
+        <h3>Why this API exists</h3>
+        <p>
+          Encoding failures usually happen before downstream AI or ETL logic even starts.
+          This API preserves raw bytes first, then repairs text deterministically so later steps
+          can work on normalized UTF-8 instead of ambiguous mojibake.
+        </p>
+      </div>
     </section>
 
     <section>
@@ -276,7 +340,7 @@
     <section>
       <h2>Use Cases</h2>
       <h3>1. Repairing Japanese mojibake</h3>
-      <ul>
+      <ul class="usecase-list">
         <li>SJIS → UTF-8 system migrations</li>
         <li>Legacy CSV / TSV / log files</li>
         <li>Mixed Windows / Unix environments</li>
@@ -334,4 +398,3 @@ print(res.json())</code></pre>
   </footer>
 </body>
 </html>
-
