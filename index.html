@@ -5,11 +5,11 @@
   <link rel="alternate" hreflang="en" href="https://apiron-lab.github.io/" />
   <link rel="alternate" hreflang="ja" href="https://apiron-lab.github.io/ja/" />
   <meta charset="UTF-8" />
-  <title>APIron Lab – LLM Utility APIs (Encoding Repair / Token Counter / CSV / JSON)</title>
+  <title>APIron Lab – Pre-AI Input Hygiene Tools and LLM Utility APIs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="APIron Lab provides practical utility APIs for LLM workflows, including Encoding Repair API, Universal Token Counter (UTC), CSV Escape & Sanitize API, and API Adjustmenter. Tools for multilingual text, CSV hygiene, token counting, and JSON normalization."
+    content="APIron Lab develops Pre-AI Input Hygiene tools and practical LLM utility APIs, including MaskedForm, Encoding Repair API, Universal Token Counter, CSV Escape & Sanitize API, and API Adjustmenter."
   />
   <meta name="robots" content="index,follow" />
   <style>
@@ -323,6 +323,7 @@
     <div class="hero-actions">
       <a class="hero-button" href="https://rapidapi.com/user/APIronlab" rel="noopener">View on RapidAPI</a>
       <a class="hero-button" href="https://github.com/APIron-lab" rel="noopener">GitHub Organization</a>
+      <a class="hero-button" href="#contact">Contact</a>
     </div>
   </header>
 
@@ -356,6 +357,34 @@
       </p>
 
       <div class="api-grid">
+        <!-- MaskedForm -->
+        <article class="api-card">
+          <div class="api-meta">
+            <span class="badge">
+              <span class="badge-dot"></span>
+              Browser / Pre-AI Privacy · Private Beta
+            </span>
+          </div>
+          <h2>MaskedForm</h2>
+          <p class="api-tagline">
+            A browser-side tool that detects and masks sensitive text before it is
+            pasted into an AI service, then restores placeholders in the AI response.
+          </p>
+          <p class="api-for">
+            For customer support, drafting, development, and other workflows where
+            personal or confidential strings should be removed before AI input.
+          </p>
+          <ul class="api-features">
+            <li>Detect and mask common sensitive-data patterns locally</li>
+            <li>Copy masked text for use with an AI service</li>
+            <li>Restore placeholders in the returned AI text</li>
+            <li>Owner-only private beta; public release is still under review</li>
+          </ul>
+          <div class="api-links">
+            <a href="#contact">Beta status and inquiries</a>
+          </div>
+        </article>
+
         <!-- Encoding Repair API -->
         <article class="api-card">
           <div class="api-meta">
@@ -529,6 +558,35 @@
         <li>Integration helpers for other clouds and local runtimes</li>
       </ul>
     </section>
+
+    <section id="contact">
+      <h2 class="section-title">Operator and contact</h2>
+      <p>
+        APIron Lab operates this official hub and the products introduced here,
+        including MaskedForm.
+      </p>
+      <div class="spotlight-note">
+        <p>
+          For general inquiries, non-sensitive bug reports, and feature requests,
+          use the public GitHub Issues page.
+        </p>
+        <div class="hero-actions">
+          <a class="hero-button" href="https://github.com/APIron-lab/apiron-lab.github.io/issues/new/choose" rel="noopener">
+            Contact via GitHub
+          </a>
+        </div>
+        <p>
+          Do not post personal information, credentials, customer logs, unreleased
+          source code, or other confidential material in a public issue. A private
+          security-reporting channel is not yet established; please do not send
+          confidential vulnerability details until one is published here.
+        </p>
+        <p class="note">
+          This is the public support route for APIron Lab products. Paid-service
+          legal disclosures, when required, will be provided separately before sales begin.
+        </p>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -538,6 +596,7 @@
       <a href="https://github.com/APIron-lab">https://github.com/APIron-lab</a>
       · RapidAPI:
       <a href="https://rapidapi.com/user/APIronlab">https://rapidapi.com/user/APIronlab</a>
+      · <a href="#contact">Contact</a>
     </div>
   </footer>
 </body>

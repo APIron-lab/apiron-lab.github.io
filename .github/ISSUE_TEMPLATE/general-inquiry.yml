@@ -1,0 +1,37 @@
+name: General inquiry
+description: Ask a non-confidential question about an APIron Lab product.
+title: "[Inquiry] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form is public. Do not include personal information, credentials, customer logs, unreleased source code, vulnerability details, or other confidential material.
+  - type: dropdown
+    id: product
+    attributes:
+      label: Product
+      options:
+        - MaskedForm
+        - Encoding Repair API
+        - Universal Token Counter
+        - CSV Escape & Sanitize API
+        - API Adjustmenter
+        - APIron Lab website
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Share only information that is safe to publish.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public-information confirmation
+      options:
+        - label: I confirm that this report contains no personal, credential, customer, security-sensitive, or confidential information.
+          required: true
