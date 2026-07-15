@@ -4,11 +4,11 @@
   <link rel="alternate" hreflang="ja" href="https://apiron-lab.github.io/ja/" />
   <link rel="alternate" hreflang="en" href="https://apiron-lab.github.io/" />
   <meta charset="UTF-8" />
-  <title>APIron Lab – LLMユーティリティAPI（Encoding Repair / UTC / CSV / JSON）</title>
+  <title>APIron Lab – AI入力前の衛生処理ツールとLLMユーティリティAPI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="APIron Lab は、Encoding Repair API、Universal Token Counter (UTC)、CSV Escape & Sanitize API、API Adjustmenter など、LLMワークフロー向けの実務的なユーティリティAPIを提供します。文字化け修復、トークン計測、CSV整形、JSON正規化に対応。"
+    content="APIron Lab は、MaskedForm、Encoding Repair API、Universal Token Counter、CSV Escape & Sanitize API、API Adjustmenterなど、AI入力前の衛生処理ツールと実務的なLLMユーティリティAPIを開発しています。"
   />
   <meta name="robots" content="index,follow" />
   <style>
@@ -320,6 +320,7 @@
     <div class="hero-actions">
       <a class="hero-button" href="https://rapidapi.com/user/APIronlab" rel="noopener">RapidAPI で見る</a>
       <a class="hero-button" href="https://github.com/APIron-lab" rel="noopener">GitHub Organization</a>
+      <a class="hero-button" href="#contact">お問い合わせ</a>
     </div>
   </header>
 
@@ -352,6 +353,34 @@
       </p>
 
       <div class="api-grid">
+        <!-- MaskedForm -->
+        <article class="api-card">
+          <div class="api-meta">
+            <span class="badge">
+              <span class="badge-dot"></span>
+              Browser / Pre-AI Privacy · 非公開ベータ
+            </span>
+          </div>
+          <h2>MaskedForm</h2>
+          <p class="api-tagline">
+            AIサービスへ貼り付ける前に、個人情報や機密性のある文字列を
+            ブラウザ内で検出・マスクし、AIの回答に含まれるプレースホルダーを再置換するツールです。
+          </p>
+          <p class="api-for">
+            顧客対応、文章作成、開発など、AI入力前に個人情報や機密文字列を
+            取り除きたい業務向け。
+          </p>
+          <ul class="api-features">
+            <li>一般的な機密データ形式を端末内で検出・マスク</li>
+            <li>マスク済みテキストをAIサービスへ貼り付け</li>
+            <li>AIの回答文にプレースホルダーを再置換</li>
+            <li>現在はオーナー限定の非公開ベータ。一般公開は審査中</li>
+          </ul>
+          <div class="api-links">
+            <a href="#contact">ベータ状況・お問い合わせ</a>
+          </div>
+        </article>
+
         <!-- Encoding Repair API -->
         <article class="api-card">
           <div class="api-meta">
@@ -489,6 +518,33 @@
         <li>他クラウド / ローカル環境との連携ヘルパー</li>
       </ul>
     </section>
+
+    <section id="contact">
+      <h2 class="section-title">運営者・お問い合わせ</h2>
+      <p>
+        APIron Lab は、この公式サイトと MaskedForm を含む掲載製品を運営しています。
+      </p>
+      <div class="spotlight-note">
+        <p>
+          一般的なお問い合わせ、機密性のない不具合報告、機能要望は、
+          公開GitHub Issuesで受け付けます。
+        </p>
+        <div class="hero-actions">
+          <a class="hero-button" href="https://github.com/APIron-lab/apiron-lab.github.io/issues/new/choose" rel="noopener">
+            GitHubで問い合わせる
+          </a>
+        </div>
+        <p>
+          公開Issueには、個人情報、認証情報、顧客ログ、未公開ソースコードなどの
+          機密情報を投稿しないでください。非公開のセキュリティ報告窓口は現在準備中です。
+          窓口がこのページに掲載されるまでは、脆弱性の詳細や秘密情報を送信しないでください。
+        </p>
+        <p class="note">
+          ここはAPIron Lab製品の一般問い合わせ窓口です。有料サービスで法令上必要となる
+          事業者情報は、販売開始前に別途表示します。
+        </p>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -498,6 +554,7 @@
       <a href="https://github.com/APIron-lab">https://github.com/APIron-lab</a>
       · RapidAPI:
       <a href="https://rapidapi.com/user/APIronlab">https://rapidapi.com/user/APIronlab</a>
+      · <a href="#contact">お問い合わせ</a>
     </div>
   </footer>
 </body>
