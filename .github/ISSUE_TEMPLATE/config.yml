@@ -3,3 +3,6 @@ contact_links:
   - name: APIron Lab official site
     url: https://apiron-lab.github.io/ja/#contact
     about: Read the operator and contact guidance before submitting.
+  - name: Private security report
+    url: https://github.com/APIron-lab/apiron-lab.github.io/security/advisories/new
+    about: Confidentially report a vulnerability without creating a public Issue.
